@@ -1,0 +1,27 @@
+name: "Test Steam Login"
+
+on:
+    push: { branches: [main] }
+    pull_request: {}
+    workflow_dispatch:
+
+jobs:
+  testSteamDeploy:
+    name: "Test on Ubuntu 22.04"
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Unzip Assets
+        run: |
+          mkdir build
+          mkdir build/client_windows
+          mkdir build/client_mac
+      - uses: ZeroParticle/steam-deploy@main
+        with:
+          appId: ${{ secrets.TEST_APP_ID }}
+          username: ${{ secrets.STEAM_USERNAME }}
+          configVdf: ${{ secrets.STEAM_CONFIG_VDF }}
+          buildDescription: 'Fake test build'
+          rootPath: build
+          depot2Path: client_windows
+          depot3Path: client_mac
+          releaseBranch: 'fakebranch'
